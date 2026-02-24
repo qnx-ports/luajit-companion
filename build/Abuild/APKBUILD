@@ -1,0 +1,37 @@
+# Maintainer: Ethan Leir <eleir@qnx.com>
+pkgname=luajit
+# LuaJIT has a "rolling release" where you should follow git HEAD
+_commit=871db2c84ecefd70a850e03a6c340214a81739f0
+# The patch version is the timestamp of the above git commit, obtain via `git show -s --format=%ct`
+_ct=1753364724
+pkgver="2.1.${_ct}"
+pkgrel=1
+pkgdesc="Just-in-time compiler and drop-in replacement for Lua 5.1"
+url="https://github.com/LuaJIT/LuaJIT"
+arch="all"
+license="MIT"
+makedepends=""
+subpackages="$pkgname-dev $pkgname-doc"
+source="LuaJIT-${_commit}.tar.gz::https://github.com/LuaJIT/LuaJIT/archive/${_commit}.tar.gz"
+options="!check"
+builddir="${srcdir}/LuaJIT-${_commit}"
+
+build() {
+    make amalg PREFIX=/usr BUILDMODE=dynamic TARGET_STRIP=" @:"
+}
+
+check() {
+  # Make sure that _ct was updated
+  test "${_ct}" == "$(cat .relver)"
+}
+
+
+package() {
+    make install DESTDIR="$pkgdir" PREFIX=/usr
+
+    install -Dm644 COPYRIGHT "$pkgdir/usr/share/licenses/$pkgname/COPYRIGHT"
+}
+
+sha512sums="
+5e74d4343a52fba3c8846e34e31cd7f590935fdfb4ba97bb49902ffc58e6eda55f1c17ece85f7eaf0c5753055ad2c5182b93c58d7176a9d65bdca92e76bad1d9  LuaJIT-871db2c84ecefd70a850e03a6c340214a81739f0.tar.gz
+"
