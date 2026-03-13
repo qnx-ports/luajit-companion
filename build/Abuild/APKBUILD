@@ -5,7 +5,7 @@ _commit=871db2c84ecefd70a850e03a6c340214a81739f0
 # The patch version is the timestamp of the above git commit, obtain via `git show -s --format=%ct`
 _ct=1753364724
 pkgver="2.1.${_ct}"
-pkgrel=1
+pkgrel=${pkgrel:-0}
 pkgdesc="Just-in-time compiler and drop-in replacement for Lua 5.1"
 url="https://github.com/LuaJIT/LuaJIT"
 arch="all"
@@ -32,6 +32,7 @@ package() {
     install -Dm644 COPYRIGHT "$pkgdir/usr/share/licenses/$pkgname/COPYRIGHT"
 }
 
+options="$options ${DISABLE_CHECK:+!check}"
 sha512sums="
 5e74d4343a52fba3c8846e34e31cd7f590935fdfb4ba97bb49902ffc58e6eda55f1c17ece85f7eaf0c5753055ad2c5182b93c58d7176a9d65bdca92e76bad1d9  LuaJIT-871db2c84ecefd70a850e03a6c340214a81739f0.tar.gz
 "
